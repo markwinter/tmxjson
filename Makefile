@@ -9,10 +9,10 @@
 
 ###  Modify these values for your project ###
 
-TARGET_EXEC ?= tmxjson.so
+TARGET_EXEC ?= libtmxjson.so
 
 # Add your -IDIRS here. Dont include the -I part as it will be done for you
-MY_INC_DIRS = 
+MY_INC_DIRS =
 
 # Add your linking flags here
 MY_LDFLAGS =
@@ -32,9 +32,9 @@ DEPS := $(OBJS:.o=.d)
 INC_DIRS := $(shell find $(SRC_DIRS) -type d) $(MY_INC_DIRS)
 INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
-CPPFLAGS ?= $(INC_FLAGS) -MMD -MP -std=c++14 -O2 -Wall -Wextra
+CPPFLAGS ?= -fPIC $(INC_FLAGS) -MMD -MP -std=c++14 -O2 -Wall -Wextra
 
-LDFLAGS = $(MY_LDFLAGS)
+LDFLAGS = -shared $(MY_LDFLAGS)
 
 $(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
 	$(CXX) $(OBJS) -o $@ $(LDFLAGS)
