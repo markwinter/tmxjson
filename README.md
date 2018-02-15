@@ -13,4 +13,4 @@ You can either include this source in your project, or you can build it and link
 - Base64 and/or compressed layer data. For now your `tile layer format` must be `CSV`
 - Objects
 - Custom Properties
-- Terrain
+- Tilesets: `tileoffset`, `grid`, `terrains`
