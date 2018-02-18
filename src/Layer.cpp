@@ -38,11 +38,11 @@ void Layer::SetY(int y) {
   y_ = y;
 }
 
-std::vector<int>& Layer::GetData() {
+std::vector<uint32_t>& Layer::GetData() {
   return data_;
 }
 
-void Layer::SetData(std::vector<int> d) {
+void Layer::SetData(std::vector<uint32_t> d) {
   data_ = d;
 }
 

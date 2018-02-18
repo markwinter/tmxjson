@@ -18,9 +18,9 @@ class Layer {
   void SetX(int);
   void SetY(int);
 
-  std::vector<int>& GetData();
+  std::vector<uint32_t>& GetData();
   std::vector<Layer>& GetLayers();
-  void SetData(std::vector<int>);
+  void SetData(std::vector<uint32_t>);
   void SetLayers(std::vector<Layer>);
 
   LayerType GetType() const;
@@ -39,7 +39,7 @@ class Layer {
   int x_;
   int y_;
 
-  std::vector<int> data_;
+  std::vector<uint32_t> data_;
   std::vector<Layer> layers_;
 
   LayerType type_;

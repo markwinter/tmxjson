@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 
+#include "base64.hpp"
 #include "json.hpp"
 #include "Map.hpp"
 
@@ -15,8 +16,29 @@ void from_json(const json& layer_json, Layer& layer) {
   layer.SetX(layer_json["x"]);
   layer.SetY(layer_json["y"]);
 
-  // Todo: decompress the data and store it as vector
-  layer.SetData(layer_json["data"]);
+  try {
+    if (layer_json.at("encoding") == "base64") {
+      std::string data = base64_decode(layer_json["data"]);
+
+      // Convert the data to unsigned chars to make the bit-shifting below work correctly
+      std::vector<unsigned char> byte_data;
+      byte_data.insert(byte_data.end(), data.begin(), data.end());
+
+      std::vector<uint32_t> gids;
+      for (auto i = 0u; i < byte_data.size() - 3u; i += 4u) {
+        uint32_t id = byte_data[i] |
+                      byte_data[i + 1] << 8 |
+                      byte_data[i + 2] << 16 |
+                      byte_data[i + 3] << 24;
+        gids.push_back(id);
+      }
+
+      layer.SetData(gids);
+    }
+  } catch (json::out_of_range& e) {
+    // If no 'encoding' key then data is just plain int array
+    layer.SetData(layer_json["data"]);
+  }
 
   std::string type = layer_json["type"];
   if (type == "tilelayer")
@@ -78,8 +100,11 @@ Map::Map(std::string file) {
   version_ = map_json["version"];
   tiled_version_ = map_json["tiledversion"];
 
-  if (!map_json["backgroundcolor"].is_null())
-    background_color_ = map_json["backgroundcolor"];
+  try {
+    background_color_ = map_json.at("backgroundcolor");
+  } catch (json::out_of_range& e) {
+    background_color_ = "";
+  }
   infinite_ = map_json["infinite"];
   next_object_id_ = map_json["nextobjectid"];
 
