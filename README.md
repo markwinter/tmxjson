@@ -3,7 +3,7 @@
 tmxjson is a library for reading json formatted maps exported from the [Tiled Map Editor](http://www.mapeditor.org/).
 
 ### Using Tiled and tmxjson
-Make sure your `Tile Layer Format` is set to `CSV`. You must also embed your tilesets into the map. Then you can export
+Make sure your `Tile Layer Format` is set to `CSV` or `Base64 (uncompressed)`. You must also embed your tilesets into the map. Then you can export
 your map as json to be used by this library (File > Export As)
 
 ### How to use this library
@@ -20,7 +20,7 @@ auto tile_sets = map.GetTileSets();
 ```
 
 ### Currently Not Supported
-- Base64 and/or compressed layer data. For now your `tile layer format` must be `CSV`
+- Compressed layer data. For now your `tile layer format` must be `CSV` or `Base64 (uncompressed)`
 - Objects
 - Custom Properties
 - Tilesets: `tileoffset`, `grid`, `terrains`
