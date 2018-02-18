@@ -14,12 +14,15 @@ using json = nlohmann::json;
 
 namespace tmxjson {
 
-enum class Orientation { kOrthogonal, kIsometric, kStaggered, kHexagonal };
-enum class RenderOrder { kRightDown, kRightUp, kLeftDown, kLeftUp };
+enum class Orientation { kNone, kOrthogonal, kIsometric, kStaggered, kHexagonal };
+enum class RenderOrder { kNone, kRightDown, kRightUp, kLeftDown, kLeftUp };
 
 class Map {
  public:
+  Map();
   Map(std::string file);
+
+  bool IsMapLoaded() const;
 
   std::string GetBackgroundColor() const;
   bool IsInfinite() const;
@@ -59,6 +62,8 @@ class Map {
   std::string type_;
   int version_;
   std::string tiled_version_;
+
+  bool map_loaded_;
 };
 }  // namespace tmxjson
 

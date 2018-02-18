@@ -54,6 +54,21 @@ void from_json(const json& tileset_json, TileSet& tileset) {
   tileset.SetMargin(tileset_json["margin"]);
 }
 
+Map::Map()
+  : background_color_(""),
+    infinite_(false),
+    next_object_id_(0),
+    orientation_(Orientation::kNone),
+    render_order_(RenderOrder::kNone),
+    tile_width_(0),
+    tile_height_(0),
+    height_(0),
+    width_(0),
+    type_(""),
+    version_(0),
+    tiled_version_(0),
+    map_loaded_(false) {}
+
 Map::Map(std::string file) {
   std::ifstream ifs(file);
   json map_json;
@@ -101,6 +116,12 @@ Map::Map(std::string file) {
 
   for (auto& tile_set : map_json["tilesets"])
     tile_sets_.push_back(tile_set);
+
+  map_loaded_ = true;
+}
+
+bool Map::IsMapLoaded() const {
+  return map_loaded_;
 }
 
 std::string Map::GetBackgroundColor() const {
