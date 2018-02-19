@@ -2,6 +2,8 @@
 
 #include <iostream>
 #include <fstream>
+#include <vector>
+#include <utility>
 
 #include "base64.hpp"
 #include "json.hpp"
@@ -10,36 +12,59 @@
 using json = nlohmann::json;
 
 namespace tmxjson {
-void from_json(const json& layer_json, Layer& layer) {
-  layer.SetHeight(layer_json["height"]);
-  layer.SetWidth(layer_json["width"]);
-  layer.SetX(layer_json["x"]);
-  layer.SetY(layer_json["y"]);
+void from_json(const json& object_json, Object& object) {
+  object.SetId(object_json["id"]);
+  try {
+    object.SetGid(object_json.at("gid"));
+  } catch (json::out_of_range& e) {
+    object.SetGid(0);
+  }
+  object.SetName(object_json["name"]);
+  object.SetType(object_json["type"]);
+
+  object.SetObjectType(ObjectType::kRectangle);
 
   try {
-    if (layer_json.at("encoding") == "base64") {
-      std::string data = base64_decode(layer_json["data"]);
+    if (object_json.at("ellipse"))
+      object.SetObjectType(ObjectType::kEllipse);
+  } catch (json::out_of_range& e) {}
 
-      // Convert the data to unsigned chars to make the bit-shifting below work correctly
-      std::vector<unsigned char> byte_data;
-      byte_data.insert(byte_data.end(), data.begin(), data.end());
+  try {
+    if (object_json.at("point"))
+      object.SetObjectType(ObjectType::kPoint);
+  } catch (json::out_of_range& e) {}
 
-      std::vector<uint32_t> gids;
-      for (auto i = 0u; i < byte_data.size() - 3u; i += 4u) {
-        uint32_t id = byte_data[i] |
-                      byte_data[i + 1] << 8 |
-                      byte_data[i + 2] << 16 |
-                      byte_data[i + 3] << 24;
-        gids.push_back(id);
-      }
+  try {
+    if (object_json.at("polygon").size() >= 0)
+      object.SetObjectType(ObjectType::kPolygon);
 
-      layer.SetData(gids);
-    }
-  } catch (json::out_of_range& e) {
-    // If no 'encoding' key then data is just plain int array
-    layer.SetData(layer_json["data"]);
-  }
+    std::vector<std::pair<float, float>> data;
+    for (auto& pair : object_json["polygon"])
+      data.emplace_back(pair["x"], pair["y"]);
 
+    object.SetDataPoints(data);
+  } catch (json::out_of_range& e) {}
+
+  try {
+    if (object_json.at("polyline").size() >= 0)
+      object.SetObjectType(ObjectType::kPolyline);
+
+    std::vector<std::pair<float, float>> data;
+    for (auto& pair : object_json["polyline"])
+      data.emplace_back(pair["x"], pair["y"]);
+
+    object.SetDataPoints(data);
+  } catch (json::out_of_range& e) {}
+
+  object.SetRotation(object_json["rotation"]);
+  object.SetVisible(object_json["visible"]);
+  object.SetX(object_json["x"]);
+  object.SetY(object_json["y"]);
+  object.SetHeight(object_json["height"]);
+  object.SetWidth(object_json["width"]);
+}
+
+void from_json(const json& layer_json, Layer& layer) {
   std::string type = layer_json["type"];
   if (type == "tilelayer")
     layer.SetType(LayerType::kTileLayer);
@@ -50,9 +75,28 @@ void from_json(const json& layer_json, Layer& layer) {
   else if (type == "group")
     layer.SetType(LayerType::kGroup);
 
-  if (layer.GetType() == LayerType::kGroup)
+  if (layer.GetType() == LayerType::kGroup) {
     layer.SetLayers(layer_json["layers"]);
+  } else if (layer.GetType() == LayerType::kTileLayer) {
+    layer.SetHeight(layer_json["height"]);
+    layer.SetWidth(layer_json["width"]);
+    try {
+      if (layer_json.at("encoding") == "base64")
+        layer.SetData(base64_decode(layer_json["data"]));
+    } catch (json::out_of_range& e) {
+      // If no 'encoding' key then data is just plain int array
+      layer.SetData(layer_json["data"]);
+    }
+  } else if (layer.GetType() == LayerType::kObjectGroup) {
+    layer.SetObjects(layer_json["objects"]);
+    if (layer_json["draworder"] == "topdown")
+      layer.SetDrawOrder(DrawOrder::kTopDown);
+    else if (layer_json["draworder"] == "index")
+      layer.SetDrawOrder(DrawOrder::kIndex);
+  }
 
+  layer.SetX(layer_json["x"]);
+  layer.SetY(layer_json["y"]);
   layer.SetName(layer_json["name"]);
   layer.SetOpacity(layer_json["opacity"]);
   layer.SetVisible(layer_json["visible"]);

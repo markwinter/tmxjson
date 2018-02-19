@@ -3,9 +3,12 @@
 #ifndef LAYER_H_
 #define LAYER_H_
 
+#include "Object.hpp"
+
 namespace tmxjson {
 
 enum class LayerType { kTileLayer, kObjectGroup, kImageLayer, kGroup };
+enum class DrawOrder { kTopDown, kIndex };
 
 class Layer {
  public:
@@ -20,11 +23,15 @@ class Layer {
 
   std::vector<uint32_t>& GetData();
   std::vector<Layer>& GetLayers();
+  std::vector<Object>& GetObjects();
   void SetData(std::vector<uint32_t>);
   void SetLayers(std::vector<Layer>);
+  void SetObjects(std::vector<Object>);
 
   LayerType GetType() const;
+  DrawOrder GetDrawOrder() const;
   void SetType(LayerType);
+  void SetDrawOrder(DrawOrder);
 
   std::string GetName() const;
   float GetOpacity() const;
@@ -41,8 +48,10 @@ class Layer {
 
   std::vector<uint32_t> data_;
   std::vector<Layer> layers_;
+  std::vector<Object> objects_;
 
   LayerType type_;
+  DrawOrder draw_order_;
 
   std::string name_;
   float opacity_;

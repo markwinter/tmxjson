@@ -54,12 +54,28 @@ void Layer::SetLayers(std::vector<Layer> l) {
   layers_ = l;
 }
 
+std::vector<Object>& Layer::GetObjects() {
+  return objects_;
+}
+
+void Layer::SetObjects(std::vector<Object> objects) {
+  objects_ = objects;
+}
+
 LayerType Layer::GetType() const {
   return type_;
 }
 
 void Layer::SetType(LayerType t) {
   type_ = t;
+}
+
+DrawOrder Layer::GetDrawOrder() const {
+  return draw_order_;
+}
+
+void Layer::SetDrawOrder(DrawOrder order) {
+  draw_order_ = order;
 }
 
 std::string Layer::GetName() const {

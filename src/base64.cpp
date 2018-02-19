@@ -41,7 +41,7 @@ static inline bool is_base64(unsigned char c) {
   return (isalnum(c) || (c == '+') || (c == '/'));
 }
 
-std::string base64_decode(std::string const& encoded_string) {
+std::vector<uint32_t> base64_decode(std::string const& encoded_string) {
   int in_len = encoded_string.size();
   int i = 0;
   int j = 0;
@@ -75,5 +75,17 @@ std::string base64_decode(std::string const& encoded_string) {
     for (j = 0; (j < i - 1); j++) ret += char_array_3[j];
   }
 
-  return ret;
+  std::vector<unsigned char> byte_data;
+  byte_data.insert(byte_data.end(), ret.begin(), ret.end());
+
+  std::vector<uint32_t> gids;
+  for (auto i = 0u; i < byte_data.size() - 3u; i += 4u) {
+    uint32_t id = byte_data[i] |
+                  byte_data[i + 1] << 8 |
+                  byte_data[i + 2] << 16 |
+                  byte_data[i + 3] << 24;
+    gids.push_back(id);
+  }
+
+  return gids;
 }
