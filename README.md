@@ -21,6 +21,7 @@ auto tile_sets = map.GetTileSets();
 
 ### Currently Not Supported
 - Compressed layer data. For now your `tile layer format` must be `CSV` or `Base64 (uncompressed)`
-- Objects
+- Objects: `text`
 - Custom Properties
 - Tilesets: `tileoffset`, `grid`, `terrains`
+- ImageLayer
