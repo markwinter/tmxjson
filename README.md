@@ -17,6 +17,11 @@ Then you will want to use an instance of the Map class to load and render your m
 tmxjson::Map map("mymap.json");
 auto layers = map.GetLayers();
 auto tile_sets = map.GetTileSets();
+
+for (auto layer : layers) {
+  std::vector<uint32_t> tiles = layer.GetData();
+  ...
+}
 ```
 
 ### Currently Not Supported
