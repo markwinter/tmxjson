@@ -29,4 +29,3 @@ for (auto layer : layers) {
 - Objects: `text`
 - Custom Properties
 - Tilesets: `tileoffset`, `grid`, `terrains`
-- ImageLayer
