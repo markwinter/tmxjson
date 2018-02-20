@@ -22,20 +22,36 @@ void Layer::SetWidth(int w) {
   width_ = w;
 }
 
-int Layer::GetX() const {
+float Layer::GetX() const {
   return x_;
 }
 
-void Layer::SetX(int x) {
+void Layer::SetX(float x) {
   x_ = x;
 }
 
-int Layer::GetY() const {
+float Layer::GetY() const {
   return y_;
 }
 
-void Layer::SetY(int y) {
+void Layer::SetY(float y) {
   y_ = y;
+}
+
+float Layer::GetOffsetX() const {
+  return offset_x_;
+}
+
+void Layer::SetOffsetX(float x) {
+  offset_x_ = x;
+}
+
+float Layer::GetOffsetY() const {
+  return offset_y_;
+}
+
+void Layer::SetOffsetY(float y) {
+  offset_y_ = y;
 }
 
 std::vector<uint32_t>& Layer::GetData() {
@@ -60,6 +76,14 @@ std::vector<Object>& Layer::GetObjects() {
 
 void Layer::SetObjects(std::vector<Object> objects) {
   objects_ = objects;
+}
+
+std::string Layer::GetImage() const {
+  return image_;
+}
+
+void Layer::SetImage(std::string image) {
+  image_ = image;
 }
 
 LayerType Layer::GetType() const {

@@ -89,10 +89,25 @@ void from_json(const json& layer_json, Layer& layer) {
     }
   } else if (layer.GetType() == LayerType::kObjectGroup) {
     layer.SetObjects(layer_json["objects"]);
+
     if (layer_json["draworder"] == "topdown")
       layer.SetDrawOrder(DrawOrder::kTopDown);
     else if (layer_json["draworder"] == "index")
       layer.SetDrawOrder(DrawOrder::kIndex);
+  } else if (layer.GetType() == LayerType::kImageLayer) {
+    layer.SetImage(layer_json["image"]);
+  }
+
+  // All layers can optionally have offsets. Only appear if they are non-0
+  try {
+    layer.SetOffsetX(layer_json.at("offsetx"));
+  } catch (json::out_of_range& e) {
+    layer.SetOffsetX(0.0f);
+  }
+  try {
+    layer.SetOffsetX(layer_json.at("offsety"));
+  } catch (json::out_of_range& e) {
+    layer.SetOffsetX(0.0f);
   }
 
   layer.SetX(layer_json["x"]);
