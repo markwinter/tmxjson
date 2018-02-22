@@ -36,3 +36,5 @@ for (auto layer : layers) {
 - Add "Tile" class which will have methods to simplify rendering
 - Add method to only get tiles matching the rendering view size
 - Improve performance e.g. move vectors instead of copying twice
+- Add tests
+- Add documentation (doxygen)
