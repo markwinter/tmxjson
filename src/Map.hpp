@@ -28,8 +28,8 @@ class Map {
   bool IsInfinite() const;
   int GetNextObjectId() const;
 
-  std::vector<Layer>& GetLayers();
-  std::vector<TileSet>& GetTileSets();
+  const std::vector<Layer>& GetLayers();
+  const std::vector<TileSet>& GetTileSets();
 
   Orientation GetOrientation() const;
   RenderOrder GetRenderOrder() const;

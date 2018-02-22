@@ -107,11 +107,11 @@ int Map::GetNextObjectId() const {
   return next_object_id_;
 }
 
-std::vector<Layer>& Map::GetLayers() {
+const std::vector<Layer>& Map::GetLayers() {
   return layers_;
 }
 
-std::vector<TileSet>& Map::GetTileSets() {
+const std::vector<TileSet>& Map::GetTileSets() {
   return tile_sets_;
 }
 

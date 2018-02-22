@@ -27,9 +27,9 @@ class Layer {
   void SetOffsetX(float);
   void SetOffsetY(float);
 
-  std::vector<uint32_t>& GetData();
-  std::vector<Layer>& GetLayers();
-  std::vector<Object>& GetObjects();
+  const std::vector<uint32_t>& GetData();
+  const std::vector<Layer>& GetLayers();
+  const std::vector<Object>& GetObjects();
   std::string GetImage() const;
   void SetData(std::vector<uint32_t>);
   void SetLayers(std::vector<Layer>);

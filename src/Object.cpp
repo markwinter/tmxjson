@@ -45,7 +45,7 @@ void Object::SetObjectType(ObjectType type) {
   object_type_ = type;
 }
 
-std::vector<std::pair<float, float>>& Object::GetDataPoints() {
+const std::vector<std::pair<float, float>>& Object::GetDataPoints() {
   return data_points_;
 }
 

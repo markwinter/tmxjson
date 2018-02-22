@@ -25,7 +25,7 @@ class Object {
   void SetType(std::string);
 
   ObjectType GetObjectType() const;
-  std::vector<std::pair<float, float>>& GetDataPoints();
+  const std::vector<std::pair<float, float>>& GetDataPoints();
   void SetObjectType(ObjectType);
   void SetDataPoints(std::vector<std::pair<float, float>>);
 

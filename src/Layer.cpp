@@ -53,7 +53,7 @@ void Layer::SetOffsetY(float y) {
   offset_y_ = y;
 }
 
-std::vector<uint32_t>& Layer::GetData() {
+const std::vector<uint32_t>& Layer::GetData() {
   return data_;
 }
 
@@ -61,7 +61,7 @@ void Layer::SetData(std::vector<uint32_t> d) {
   data_ = d;
 }
 
-std::vector<Layer>& Layer::GetLayers() {
+const std::vector<Layer>& Layer::GetLayers() {
   return layers_;
 }
 
@@ -69,7 +69,7 @@ void Layer::SetLayers(std::vector<Layer> l) {
   layers_ = l;
 }
 
-std::vector<Object>& Layer::GetObjects() {
+const std::vector<Object>& Layer::GetObjects() {
   return objects_;
 }
 
