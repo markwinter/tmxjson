@@ -13,6 +13,8 @@ enum class ObjectType { kRectangle, kPoint, kEllipse, kPolygon, kPolyline, kText
 
 class Object {
  public:
+  Object();
+
   int GetId() const;
   int GetGid() const;
   std::string GetName() const;

@@ -1,52 +1,46 @@
 /* MIT License. Copyright Mark Winter */
 
 #include "thirdparty/base64.hpp"
+#include "Utils.hpp"
 #include "Parsers.hpp"
 
 namespace tmxjson {
 void from_json(const json& object_json, Object& object) {
   object.SetId(object_json["id"]);
-  try {
+
+  if (check_json_var(object_json, "gid"))
     object.SetGid(object_json.at("gid"));
-  } catch (json::out_of_range& e) {
-    object.SetGid(0);
-  }
+
   object.SetName(object_json["name"]);
   object.SetType(object_json["type"]);
 
   object.SetObjectType(ObjectType::kRectangle);
 
-  try {
-    if (object_json.at("ellipse"))
-      object.SetObjectType(ObjectType::kEllipse);
-  } catch (json::out_of_range& e) {}
+  if (check_json_var(object_json, "ellipse"))
+    object.SetObjectType(ObjectType::kEllipse);
 
-  try {
-    if (object_json.at("point"))
-      object.SetObjectType(ObjectType::kPoint);
-  } catch (json::out_of_range& e) {}
+  if (check_json_var(object_json, "point"))
+    object.SetObjectType(ObjectType::kPoint);
 
-  try {
-    if (object_json.at("polygon").size() >= 0)
-      object.SetObjectType(ObjectType::kPolygon);
+  if (check_json_var(object_json, "polygon")) {
+    object.SetObjectType(ObjectType::kPolygon);
 
     std::vector<std::pair<float, float>> data;
     for (auto& pair : object_json["polygon"])
       data.emplace_back(pair["x"], pair["y"]);
 
     object.SetDataPoints(data);
-  } catch (json::out_of_range& e) {}
+  }
 
-  try {
-    if (object_json.at("polyline").size() >= 0)
-      object.SetObjectType(ObjectType::kPolyline);
+  if (check_json_var(object_json, "polyline")) {
+    object.SetObjectType(ObjectType::kPolyline);
 
     std::vector<std::pair<float, float>> data;
     for (auto& pair : object_json["polyline"])
       data.emplace_back(pair["x"], pair["y"]);
 
     object.SetDataPoints(data);
-  } catch (json::out_of_range& e) {}
+  }
 
   object.SetRotation(object_json["rotation"]);
   object.SetVisible(object_json["visible"]);
@@ -57,15 +51,7 @@ void from_json(const json& object_json, Object& object) {
 }
 
 void from_json(const json& layer_json, Layer& layer) {
-  std::string type = layer_json["type"];
-  if (type == "tilelayer")
-    layer.SetType(LayerType::kTileLayer);
-  else if (type == "objectgroup")
-    layer.SetType(LayerType::kObjectGroup);
-  else if (type == "imagelayer")
-    layer.SetType(LayerType::kImageLayer);
-  else if (type == "group")
-    layer.SetType(LayerType::kGroup);
+  layer.SetType(layer_json["type"].get<std::string>());
 
   if (layer.GetType() == LayerType::kGroup) {
     layer.SetLayers(layer_json["layers"]);
@@ -112,16 +98,11 @@ void from_json(const json& layer_json, Layer& layer) {
   }
 
   // All layers can optionally have offsets. Only appear in json if they are non-0
-  try {
+  if (check_json_var(layer_json, "offsetx"))
     layer.SetOffsetX(layer_json.at("offsetx"));
-  } catch (json::out_of_range& e) {
-    layer.SetOffsetX(0.0f);
-  }
-  try {
-    layer.SetOffsetX(layer_json.at("offsety"));
-  } catch (json::out_of_range& e) {
-    layer.SetOffsetX(0.0f);
-  }
+
+  if (check_json_var(layer_json, "offsety"))
+    layer.SetOffsetY(layer_json.at("offsety"));
 
   layer.SetX(layer_json["x"]);
   layer.SetY(layer_json["y"]);

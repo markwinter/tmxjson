@@ -12,6 +12,8 @@ enum class DrawOrder { kTopDown, kIndex };
 
 class Layer {
  public:
+  Layer();
+
   int GetHeight() const;
   int GetWidth() const;
   float GetX() const;
@@ -37,6 +39,7 @@ class Layer {
   LayerType GetType() const;
   DrawOrder GetDrawOrder() const;
   void SetType(LayerType);
+  void SetType(std::string);
   void SetDrawOrder(DrawOrder);
 
   std::string GetName() const;

@@ -3,6 +3,8 @@
 #include "Object.hpp"
 
 namespace tmxjson {
+Object::Object() : gid_(0) {}
+
 int Object::GetId() const {
   return id_;
 }

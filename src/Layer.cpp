@@ -3,6 +3,8 @@
 #include "Layer.hpp"
 
 namespace tmxjson {
+Layer::Layer() : offset_x_(0.0f), offset_y_(0.0f) {}
+
 int Layer::GetHeight() const {
   return height_;
 }
@@ -89,6 +91,17 @@ LayerType Layer::GetType() const {
 
 void Layer::SetType(LayerType t) {
   type_ = t;
+}
+
+void Layer::SetType(std::string type) {
+  if (type == "tilelayer")
+    type_ = LayerType::kTileLayer;
+  else if (type == "objectgroup")
+    type_ = LayerType::kObjectGroup;
+  else if (type == "imagelayer")
+    type_ = LayerType::kImageLayer;
+  else if (type == "group")
+    type_ = LayerType::kGroup;
 }
 
 DrawOrder Layer::GetDrawOrder() const {
