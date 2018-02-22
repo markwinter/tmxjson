@@ -31,7 +31,7 @@ for (auto layer : layers) {
 - Tilesets: `tileoffset`, `grid`, `terrains`
 
 
-### TODO
+### Todo
 - Finish implementing tmx spec
 - Add "Tile" class which will have methods to simplify rendering
 - Add method to only get tiles matching the rendering view size
