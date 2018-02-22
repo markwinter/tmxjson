@@ -6,7 +6,7 @@
 #include <vector>
 #include <string>
 
-#include "json.hpp"
+#include "thirdparty/json.hpp"
 #include "Layer.hpp"
 #include "TileSet.hpp"
 

@@ -1,9 +1,6 @@
 /* MIT License. Copyright 2018 Mark Winter */
 
 #include "TileSet.hpp"
-#include "json.hpp"
-
-using json = nlohmann::json;
 
 namespace tmxjson {
 int TileSet::GetColumns() const {

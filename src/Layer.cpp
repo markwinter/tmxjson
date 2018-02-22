@@ -1,9 +1,6 @@
 /* MIT License. Copyright 2018 Mark Winter */
 
-#include "json.hpp"
 #include "Layer.hpp"
-
-using json = nlohmann::json;
 
 namespace tmxjson {
 int Layer::GetHeight() const {

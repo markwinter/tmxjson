@@ -4,6 +4,6 @@
 #include <vector>
 #include <string>
 
-std::vector<uint32_t> base64_decode(std::string const& s);
+std::string base64_decode(std::string const& s);
 
 #endif

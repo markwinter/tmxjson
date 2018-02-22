@@ -29,3 +29,10 @@ for (auto layer : layers) {
 - Objects: `text`
 - Custom Properties
 - Tilesets: `tileoffset`, `grid`, `terrains`
+
+
+### TODO
+- Finish implementing tmx spec
+- Add "Tile" class which will have methods to simplify rendering
+- Add method to only get tiles matching the rendering view size
+- Improve performance e.g. move vectors instead of copying twice
