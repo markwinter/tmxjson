@@ -3,13 +3,15 @@
 #include "thirdparty/base64.hpp"
 #include "Utils.hpp"
 #include "Parsers.hpp"
+#include <string>
+#include <iostream>
 
 namespace tmxjson {
 void from_json(const json& object_json, Object& object) {
   object.SetId(object_json["id"]);
 
   if (check_json_var(object_json, "gid"))
-    object.SetGid(object_json.at("gid"));
+    object.SetGid(object_json["gid"]);
 
   object.SetName(object_json["name"]);
   object.SetType(object_json["type"]);
@@ -64,11 +66,12 @@ void from_json(const json& layer_json, Layer& layer) {
       if (layer_json.at("encoding") == "base64")
         data = base64_decode(data);
 
-      //if (layer_json.at("compression"))
-        //zlib_inflate(data.c_str(), data.length(), data, data.size());
-
       std::vector<unsigned char> byte_data;
-      byte_data.insert(byte_data.end(), data.begin(), data.end());
+      byte_data.reserve(1);
+      if (check_json_var(layer_json, "compression"))
+        zlib_inflate(data.c_str(), data.length() * sizeof(unsigned char), byte_data, 1);
+      else
+        byte_data.insert(byte_data.end(), data.begin(), data.end());
 
       std::vector<uint32_t> gids;
       for (auto i = 0u; i < byte_data.size() - 3u; i += 4u) {
@@ -76,11 +79,9 @@ void from_json(const json& layer_json, Layer& layer) {
                       byte_data[i + 1] << 8 |
                       byte_data[i + 2] << 16 |
                       byte_data[i + 3] << 24;
+        // TODO(Mark): Tile-flipping (3 most significant bits)
         gids.push_back(id);
       }
-
-      // TODO(Mark): Tile-flipping
-
       layer.SetData(gids);
     } catch (json::out_of_range& e) {
       // If no 'encoding' key then data is just plain int array
@@ -99,10 +100,10 @@ void from_json(const json& layer_json, Layer& layer) {
 
   // All layers can optionally have offsets. Only appear in json if they are non-0
   if (check_json_var(layer_json, "offsetx"))
-    layer.SetOffsetX(layer_json.at("offsetx"));
+    layer.SetOffsetX(layer_json["offsetx"]);
 
   if (check_json_var(layer_json, "offsety"))
-    layer.SetOffsetY(layer_json.at("offsety"));
+    layer.SetOffsetY(layer_json["offsety"]);
 
   layer.SetX(layer_json["x"]);
   layer.SetY(layer_json["y"]);
@@ -128,4 +129,4 @@ void from_json(const json& tileset_json, TileSet& tileset) {
   tileset.SetSpacing(tileset_json["spacing"]);
   tileset.SetMargin(tileset_json["margin"]);
 }
-}
+}  // namespace tmxjson
