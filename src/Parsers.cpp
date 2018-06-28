@@ -84,8 +84,8 @@ void from_json(const json& layer_json, Layer& layer) {
 
       layer.SetData(gids);
     } catch (json::out_of_range& e) {
-      // If no 'encoding' key then raw_data is just plain int array
-      layer.SetData(layer_json["raw_data"]);
+      // If no 'encoding' key then data is just plain int array
+      layer.SetData(layer_json["data"]);
     }
   } else if (layer.GetType() == LayerType::kObjectGroup) {
     layer.SetObjects(layer_json["objects"]);
