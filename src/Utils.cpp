@@ -26,9 +26,9 @@ bool zlib_inflate(const char* source, std::size_t inSize, std::vector<unsigned c
   stream.zalloc = Z_NULL;
   stream.zfree = Z_NULL;
   stream.opaque = Z_NULL;
-  stream.next_in = (Byte*)(source);             // Next byte to read from
+  stream.next_in = (Byte*)(source);                             // Next byte to read from
   stream.avail_in = static_cast<unsigned int>(inSize);          // How many bytes available at next_in
-  stream.next_out = (Byte*)(byte_array.data());  // Next byte to write to
+  stream.next_out = (Byte*)(byte_array.data());                 // Next byte to write to
   stream.avail_out = static_cast<unsigned int>(expectedSize);   // How many bytes available at next_out
 
   if (inflateInit(&stream) != Z_OK)
@@ -65,8 +65,15 @@ bool zlib_inflate(const char* source, std::size_t inSize, std::vector<unsigned c
       }
   }
 
+  // Calculate how much data we actually got
+  const int out_size = current_size - stream.avail_out;
+
   if (inflateEnd(&stream) != Z_OK)
     return false;
+
+  std::vector<unsigned char> new_array(out_size / sizeof(unsigned char));
+  std::memcpy(new_array.data(), byte_array.data(), out_size);
+  byte_array = std::move(new_array);
 
   dest.insert(dest.begin(), byte_array.begin(), byte_array.end());
 
