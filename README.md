@@ -19,18 +19,25 @@ tmxjson::Map map("mymap.json");
 auto layers = map.GetLayers();
 auto tile_sets = map.GetTileSets();
 
-for (auto layer : layers) {
+for (const auto& layer : layers)
+  ParseLayer(layer);
+
+void ParseLayer(tmxjson::Layer& layer) {
   if (layer.GetType() == tmxjson::LayerType::kGroup) {
-    for (auto layer : layer.GetLayers()) {
-      std::vector<uint32_t> tiles = layer.GetData();
-      ...
+    // Groups contain more embedded layers
+    for (const auto& child_layer : layer.GetLayers())
+      ParseLayer(child_layer);
+  } else if (layer.GetType() == tmxjson::LayerType::kTileLayer) {
+    for (const auto& tile : layer.GetData()) {
+      ... // Render your tiles
     }
-  } else if (layer.GetType () tmxjson::LayerType::kObjectGroup) {
-    for (auto object : layer.GetObjects()) {
-      ...
+  } else if (layer.GetType() == tmxjson::LayerType::kObjectGroup) {
+    for (const auto& object : layer.GetObjects()) {
+      ... // Render your objects
     }
+  } else if (layer.GetType() == tmxjson::LayerType::kImageLayer) {
+    ... // Render your image
   }
-  ...
 }
 ```
 
