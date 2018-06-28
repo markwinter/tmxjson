@@ -61,31 +61,31 @@ void from_json(const json& layer_json, Layer& layer) {
     layer.SetHeight(layer_json["height"]);
     layer.SetWidth(layer_json["width"]);
     try {
-      std::string data = layer_json["data"];
+      std::string raw_data = layer_json["data"];
 
       if (layer_json.at("encoding") == "base64")
-        data = base64_decode(data);
+        raw_data = base64_decode(raw_data);
+      std::vector<unsigned char> uncompressed_data;
 
-      std::vector<unsigned char> byte_data;
-      byte_data.reserve(1);
       if (check_json_var(layer_json, "compression"))
-        zlib_inflate(data.c_str(), data.length() * sizeof(unsigned char), byte_data, 1);
+        zlib_inflate(raw_data.c_str(), raw_data.length() * sizeof(unsigned char), uncompressed_data, raw_data.length() * 5);
       else
-        byte_data.insert(byte_data.end(), data.begin(), data.end());
+        uncompressed_data.insert(uncompressed_data.end(), raw_data.begin(), raw_data.end());
 
       std::vector<uint32_t> gids;
-      for (auto i = 0u; i < byte_data.size() - 3u; i += 4u) {
-        uint32_t id = byte_data[i] |
-                      byte_data[i + 1] << 8 |
-                      byte_data[i + 2] << 16 |
-                      byte_data[i + 3] << 24;
+      for (auto i = 0u; i < uncompressed_data.size() - 3u; i += 4u) {
+        uint32_t id = uncompressed_data[i] |
+                      uncompressed_data[i + 1] << 8 |
+                      uncompressed_data[i + 2] << 16 |
+                      uncompressed_data[i + 3] << 24;
         // TODO(Mark): Tile-flipping (3 most significant bits)
         gids.push_back(id);
       }
+
       layer.SetData(gids);
     } catch (json::out_of_range& e) {
-      // If no 'encoding' key then data is just plain int array
-      layer.SetData(layer_json["data"]);
+      // If no 'encoding' key then raw_data is just plain int array
+      layer.SetData(layer_json["raw_data"]);
     }
   } else if (layer.GetType() == LayerType::kObjectGroup) {
     layer.SetObjects(layer_json["objects"]);
