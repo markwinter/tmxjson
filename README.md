@@ -12,7 +12,7 @@ You can either include the source in your project, or you can build it and link 
 
 Then you will want to use an instance of the Map class to load and render your map.
 
-```
+```CPP
 #include <Map.hpp>
 
 tmxjson::Map map("mymap.json");
