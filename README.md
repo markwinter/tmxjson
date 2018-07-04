@@ -47,7 +47,7 @@ void ParseLayer(tmxjson::Layer& layer) {
 - Tilesets: `tileoffset`, `grid`, `terrains`
 - Tile-flipping
 
-### Current work
+### Current work
 - Finish implementing tmx spec
 
 ### Todo
