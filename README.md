@@ -2,6 +2,8 @@
 
 tmxjson is a library for reading json formatted maps exported from the [Tiled Map Editor](http://www.mapeditor.org/).
 
+Supported Tiled version: 1.1
+
 ### Using Tiled and tmxjson
 - Available formats: `CSV` `Base64 (Uncompressed)` `Base64 (zlib compressed)`
 - You must also embed your tilesets into the map.
@@ -43,15 +45,9 @@ void ParseLayer(tmxjson::Layer& layer) {
 
 ### Currently Not Supported
 - Custom Properties
-- Tilesets: `tileoffset`, `grid`, `terrains`
+- Tilesets: `terrains`, `tiles`
 - Tile-flipping
+- Wang sets
 
 ### Current work
-- Finish implementing tmx spec
-
-### Todo
-- Add "Tile" class which will have methods to simplify rendering
-- Add method to only get tiles matching the rendering view size
-- Improve performance e.g. move vectors instead of copying twice
-- Add tests
-- Add documentation (doxygen)
+- Finish implementing tmx 1.1 spec
