@@ -45,7 +45,7 @@ void ParseLayer(tmxjson::Layer& layer) {
 
 ### Working with custom properties
 
-You must cast to `tmxjson::TypedProperty` in order to use the method `GetValue()`
+You must cast to `tmxjson::TypedProperty<TYPE>` in order to use the method `GetValue()`
 
 ```CPP
 for (auto property : map.GetProperties()) {
@@ -57,7 +57,6 @@ for (auto property : map.GetProperties()) {
 
 ### Currently Not Supported
 - Tilesets: `terrains`, `tiles`
-- Tile-flipping
 - Wang sets
 
 ### Current work
