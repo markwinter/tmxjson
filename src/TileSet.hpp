@@ -4,10 +4,14 @@
 #define TILE_SET_H_
 
 #include <string>
+#include <tuple>
+
 
 namespace tmxjson {
 
 enum class TileSetType { kTileSet };
+
+enum class GridOrientation { kOrthogonal, kIsometric };
 
 class TileSet {
  public:
@@ -39,6 +43,11 @@ class TileSet {
   void SetSpacing(int);
   void SetMargin(int);
 
+  std::pair<int, int> GetOffset() const;
+  std::tuple<GridOrientation, int, int> GetGrid() const;
+  void SetOffset(int, int);
+  void SetGrid(GridOrientation, int, int);
+
  private:
   int columns_;
   int first_gid_;
@@ -55,6 +64,9 @@ class TileSet {
   int tile_width_;
   int spacing_;
   int margin_;
+
+  std::pair<int, int> offset_;
+  std::tuple<GridOrientation, int, int> grid_;
 };
 }  // namespace tmxjson
 

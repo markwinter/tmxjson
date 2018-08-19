@@ -132,5 +132,16 @@ void from_json(const json& tileset_json, TileSet& tileset) {
   tileset.SetTileWidth(tileset_json["tilewidth"]);
   tileset.SetSpacing(tileset_json["spacing"]);
   tileset.SetMargin(tileset_json["margin"]);
+
+  if (check_json_var(tileset_json, "tileoffset"))
+    tileset.SetOffset(tileset_json["tileoffset"]["x"], tileset_json["tileoffset"]["y"]);
+
+  if (check_json_var(tileset_json, "grid")) {
+    GridOrientation grid_orientation = GridOrientation::kOrthogonal;
+    if (tileset_json["grid"]["orientation"] == "isometric")
+      grid_orientation = GridOrientation::kIsometric;
+
+    tileset.SetGrid(grid_orientation, tileset_json["grid"]["width"], tileset_json["grid"]["height"]);
+  }
 }
 }  // namespace tmxjson

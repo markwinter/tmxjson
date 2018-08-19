@@ -98,4 +98,21 @@ int TileSet::GetMargin() const {
 void TileSet::SetMargin(int m) {
   margin_ = m;
 }
+
+void TileSet::SetOffset(int x, int y) {
+  offset_.first = x;
+  offset_.second = y;
+}
+
+std::pair<int, int> TileSet::GetOffset() const {
+  return offset_;
+}
+
+void TileSet::SetGrid(GridOrientation o, int w, int h) {
+  grid_ = std::make_tuple(o, w, h);
+}
+
+std::tuple<GridOrientation, int, int> TileSet::GetGrid() const {
+  return grid_;
+}
 }  // namespace tmxjson
