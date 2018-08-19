@@ -84,10 +84,7 @@ bool zlib_inflate(const char* source, std::size_t inSize, std::vector<unsigned c
 }
 
 void parse_properties(std::vector<std::shared_ptr<Property>>& properties, const json& j) {
-  std::cout << j << std::endl;
-
   for (auto itr = j.begin(); itr != j.end(); ++itr) {
-    std::cout << itr.key() << std::endl;
     if (itr.value().type() == json::value_t::boolean)
       properties.push_back(std::make_shared<TypedProperty<bool>>(itr.key(), itr.value(), PropertyType::kBool));
     else if (itr.value().type() == json::value_t::number_integer || itr.value().type() == json::value_t::number_unsigned)
