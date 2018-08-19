@@ -1,5 +1,8 @@
 /* MIT License. Copyright 2018 Mark Winter */
 
+#ifndef TEXT_H_
+#define TEXT_H_
+
 #include <string>
 
 namespace tmxjson {
@@ -20,3 +23,5 @@ class Text {
   bool wrap_;
 };
 }  // namespace tmxjson
+
+#endif
