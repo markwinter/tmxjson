@@ -42,7 +42,6 @@ void ParseLayer(tmxjson::Layer& layer) {
 ```
 
 ### Currently Not Supported
-- Objects: `text`
 - Custom Properties
 - Tilesets: `tileoffset`, `grid`, `terrains`
 - Tile-flipping
