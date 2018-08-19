@@ -13,9 +13,6 @@ void from_json(const json& object_json, Object& object) {
   if (check_json_var(object_json, "gid"))
     object.SetGid(object_json["gid"]);
 
-  object.SetName(object_json["name"]);
-  object.SetType(object_json["type"]);
-
   object.SetObjectType(ObjectType::kRectangle);
 
   if (check_json_var(object_json, "ellipse"))
@@ -44,6 +41,13 @@ void from_json(const json& object_json, Object& object) {
     object.SetDataPoints(data);
   }
 
+  if (check_json_var(object_json, "text")) {
+    object.SetObjectType(ObjectType::kText);
+    object.SetTextObject(object_json["text"]["text"], object_json["text"]["wrap"]);
+  }
+
+  object.SetName(object_json["name"]);
+  object.SetType(object_json["type"]);
   object.SetRotation(object_json["rotation"]);
   object.SetVisible(object_json["visible"]);
   object.SetX(object_json["x"]);

@@ -7,6 +7,8 @@
 #include <utility>
 #include <string>
 
+#include "Text.hpp"
+
 namespace tmxjson {
 
 enum class ObjectType { kRectangle, kPoint, kEllipse, kPolygon, kPolyline, kText };
@@ -19,6 +21,9 @@ class Object {
   int GetGid() const;
   std::string GetName() const;
   std::string GetType() const;
+  Text GetTextObject() const;
+  void SetTextObject(const Text&);
+  void SetTextObject(const std::string& text, bool wrap);
   void SetId(int);
   void SetGid(int);
   void SetName(std::string);
@@ -47,6 +52,7 @@ class Object {
   int gid_;
   std::string name_;
   std::string type_;
+  Text text_;
 
   ObjectType object_type_;
   std::vector<std::pair<float, float>> data_points_;

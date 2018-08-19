@@ -100,4 +100,16 @@ int Object::GetWidth() const {
 void Object::SetWidth(int width) {
   width_ = width;
 }
+
+void Object::SetTextObject(const Text& text) {
+  text_ = text;
+}
+
+void Object::SetTextObject(const std::string& text, bool wrap) {
+  text_ = Text(text, wrap);
+}
+
+Text Object::GetTextObject() const {
+  return text_;
+}
 }  // namespace tmxjson
