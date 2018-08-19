@@ -43,8 +43,19 @@ void ParseLayer(tmxjson::Layer& layer) {
 }
 ```
 
+### Working with custom properties
+
+You must cast to `tmxjson::TypedProperty` in order to use the method `GetValue()`
+
+```CPP
+for (auto property : map.GetProperties()) {
+  if (property->GetType() == tmxjson::PropertyType::kString)
+    std::cout << "Property (" << property->GetName() << "): " <<
+      dynamic_cast<tmxjson::TypedProperty<std::string>*>(property.get())->GetValue() << std::endl;
+}
+```
+
 ### Currently Not Supported
-- Custom Properties
 - Tilesets: `terrains`, `tiles`
 - Tile-flipping
 - Wang sets
