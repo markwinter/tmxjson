@@ -5,6 +5,7 @@
 
 #include "Object.hpp"
 #include "Property.hpp"
+#include "Tile.hpp"
 
 namespace tmxjson {
 
@@ -28,11 +29,11 @@ class Layer {
   void SetOffsetX(float);
   void SetOffsetY(float);
 
-  const std::vector<uint32_t>& GetData() const;
+  const std::vector<Tile>& GetData() const;
   const std::vector<Layer>& GetLayers() const;
   const std::vector<Object>& GetObjects() const;
   std::string GetImage() const;
-  void SetData(std::vector<uint32_t>);
+  void SetData(std::vector<Tile>);
   void SetLayers(std::vector<Layer>);
   void SetObjects(std::vector<Object>);
   void SetImage(std::string);
@@ -60,7 +61,7 @@ class Layer {
   float offset_x_;
   float offset_y_;
 
-  std::vector<uint32_t> data_;
+  std::vector<Tile> data_;
   std::vector<Layer> layers_;
   std::vector<Object> objects_;
   std::string image_;

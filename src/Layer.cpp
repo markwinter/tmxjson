@@ -53,11 +53,11 @@ void Layer::SetOffsetY(float y) {
   offset_y_ = y;
 }
 
-const std::vector<uint32_t>& Layer::GetData() const {
+const std::vector<Tile>& Layer::GetData() const {
   return data_;
 }
 
-void Layer::SetData(std::vector<uint32_t> d) {
+void Layer::SetData(std::vector<Tile> d) {
   data_ = d;
 }
 

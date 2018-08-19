@@ -1,12 +1,17 @@
 /* MIT License. Copyright Mark Winter */
 
+#include <iostream>
+#include <string>
+#include <memory>
+
 #include "thirdparty/miniz.hpp"
 #include "Utils.hpp"
 #include "TypedProperty.hpp"
 
-#include <iostream>
-#include <string>
-#include <memory>
+// Bits on the far end of the 32-bit global tile ID are used for tile flags
+const unsigned FLIPPED_HORIZONTALLY_FLAG = 0x80000000;
+const unsigned FLIPPED_VERTICALLY_FLAG   = 0x40000000;
+const unsigned FLIPPED_DIAGONALLY_FLAG   = 0x20000000;
 
 namespace tmxjson {
 bool check_json_var(const json& j, std::string&& key) {
@@ -94,5 +99,26 @@ void parse_properties(std::vector<std::shared_ptr<Property>>& properties, const 
     else
       properties.push_back(std::make_shared<TypedProperty<std::string>>(itr.key(), itr.value(), PropertyType::kString));
   }
+}
+
+std::vector<Tile> parse_tile_data(const std::vector<unsigned char>& data) {
+  std::vector<Tile> tiles;
+  for (auto i = 0u; i < data.size() - 3u; i += 4u) {
+    uint32_t id = data[i] |
+                  data[i + 1] << 8 |
+                  data[i + 2] << 16 |
+                  data[i + 3] << 24;
+
+    bool flipped_horizontally = (id & FLIPPED_HORIZONTALLY_FLAG);
+    bool flipped_vertically = (id & FLIPPED_VERTICALLY_FLAG);
+    bool flipped_diagonally = (id & FLIPPED_DIAGONALLY_FLAG);
+
+    id &= ~(FLIPPED_HORIZONTALLY_FLAG |
+                    FLIPPED_VERTICALLY_FLAG |
+                    FLIPPED_DIAGONALLY_FLAG);
+
+    tiles.emplace_back(id, flipped_horizontally, flipped_vertically, flipped_diagonally);
+  }
+  return tiles;
 }
 }  // namespace tmxjson

@@ -1,12 +1,12 @@
 /* MIT License. Copyright Mark Winter */
 
+#include <string>
+#include <iostream>
+
 #include "thirdparty/base64.hpp"
 #include "Utils.hpp"
 #include "Parsers.hpp"
 #include "TypedProperty.hpp"
-
-#include <string>
-#include <iostream>
 
 namespace tmxjson {
 void from_json(const json& object_json, Object& object) {
@@ -81,20 +81,10 @@ void from_json(const json& layer_json, Layer& layer) {
       else
         uncompressed_data.insert(uncompressed_data.end(), raw_data.begin(), raw_data.end());
 
-      std::vector<uint32_t> gids;
-      for (auto i = 0u; i < uncompressed_data.size() - 3u; i += 4u) {
-        uint32_t id = uncompressed_data[i] |
-                      uncompressed_data[i + 1] << 8 |
-                      uncompressed_data[i + 2] << 16 |
-                      uncompressed_data[i + 3] << 24;
-        // TODO(Mark): Tile-flipping (3 most significant bits)
-        gids.push_back(id);
-      }
-
-      layer.SetData(gids);
+      layer.SetData(parse_tile_data(uncompressed_data));
     } catch (json::out_of_range& e) {
       // If no 'encoding' key then data is just plain int array
-      layer.SetData(layer_json["data"]);
+      layer.SetData(parse_tile_data(layer_json["data"]));
     }
   } else if (layer.GetType() == LayerType::kObjectGroup) {
     layer.SetObjects(layer_json["objects"]);
