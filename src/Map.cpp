@@ -7,6 +7,7 @@
 
 #include "Parsers.hpp"
 #include "Map.hpp"
+#include "Utils.hpp"
 
 namespace tmxjson {
 Map::Map()
@@ -88,6 +89,9 @@ Map::Map(std::string file)
   for (auto& tile_set : map_json["tilesets"])
     tile_sets_.push_back(tile_set);
 
+  if (check_json_var(map_json, "properties"))
+    parse_properties(properties_, map_json["properties"]);
+
   map_loaded_ = true;
 }
 
@@ -107,11 +111,11 @@ int Map::GetNextObjectId() const {
   return next_object_id_;
 }
 
-const std::vector<Layer>& Map::GetLayers() {
+const std::vector<Layer>& Map::GetLayers() const {
   return layers_;
 }
 
-const std::vector<TileSet>& Map::GetTileSets() {
+const std::vector<TileSet>& Map::GetTileSets() const {
   return tile_sets_;
 }
 
@@ -149,5 +153,9 @@ int Map::GetVersion() const {
 
 std::string Map::GetTiledVersion() const {
   return tiled_version_;
+}
+
+const std::vector<std::shared_ptr<Property>>& Map::GetProperties() const {
+  return properties_;
 }
 }  // namespace tmxjson

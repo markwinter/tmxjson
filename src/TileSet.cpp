@@ -115,4 +115,8 @@ void TileSet::SetGrid(GridOrientation o, int w, int h) {
 std::tuple<GridOrientation, int, int> TileSet::GetGrid() const {
   return grid_;
 }
+
+std::vector<std::shared_ptr<Property>>& TileSet::GetProperties() {
+  return properties_;
+}
 }  // namespace tmxjson

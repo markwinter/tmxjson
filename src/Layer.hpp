@@ -4,6 +4,7 @@
 #define LAYER_H_
 
 #include "Object.hpp"
+#include "Property.hpp"
 
 namespace tmxjson {
 
@@ -49,6 +50,8 @@ class Layer {
   void SetOpacity(float);
   void SetVisible(bool);
 
+  std::vector<std::shared_ptr<Property>>& GetProperties();
+
  private:
   int height_;
   int width_;
@@ -61,6 +64,7 @@ class Layer {
   std::vector<Layer> layers_;
   std::vector<Object> objects_;
   std::string image_;
+  std::vector<std::shared_ptr<Property>> properties_;
 
   LayerType type_;
   DrawOrder draw_order_;

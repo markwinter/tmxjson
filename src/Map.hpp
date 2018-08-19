@@ -9,6 +9,7 @@
 #include "thirdparty/json.hpp"
 #include "Layer.hpp"
 #include "TileSet.hpp"
+#include "Property.hpp"
 
 using json = nlohmann::json;
 
@@ -28,8 +29,9 @@ class Map {
   bool IsInfinite() const;
   int GetNextObjectId() const;
 
-  const std::vector<Layer>& GetLayers();
-  const std::vector<TileSet>& GetTileSets();
+  const std::vector<Layer>& GetLayers() const;
+  const std::vector<TileSet>& GetTileSets() const;
+  const std::vector<std::shared_ptr<Property>>& GetProperties() const;
 
   Orientation GetOrientation() const;
   RenderOrder GetRenderOrder() const;
@@ -62,6 +64,8 @@ class Map {
   std::string type_;
   int version_;
   std::string tiled_version_;
+
+  std::vector<std::shared_ptr<Property>> properties_;
 
   bool map_loaded_;
 };

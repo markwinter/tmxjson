@@ -5,7 +5,9 @@
 
 #include <string>
 #include <tuple>
+#include <vector>
 
+#include "Property.hpp"
 
 namespace tmxjson {
 
@@ -48,6 +50,8 @@ class TileSet {
   void SetOffset(int, int);
   void SetGrid(GridOrientation, int, int);
 
+  std::vector<std::shared_ptr<Property>>& GetProperties();
+
  private:
   int columns_;
   int first_gid_;
@@ -67,6 +71,7 @@ class TileSet {
 
   std::pair<int, int> offset_;
   std::tuple<GridOrientation, int, int> grid_;
+  std::vector<std::shared_ptr<Property>> properties_;
 };
 }  // namespace tmxjson
 

@@ -2,8 +2,11 @@
 
 #include "thirdparty/miniz.hpp"
 #include "Utils.hpp"
+#include "TypedProperty.hpp"
+
 #include <iostream>
 #include <string>
+#include <memory>
 
 namespace tmxjson {
 bool check_json_var(const json& j, std::string&& key) {
@@ -78,5 +81,21 @@ bool zlib_inflate(const char* source, std::size_t inSize, std::vector<unsigned c
   dest.insert(dest.begin(), byte_array.begin(), byte_array.end());
 
   return true;
+}
+
+void parse_properties(std::vector<std::shared_ptr<Property>>& properties, const json& j) {
+  std::cout << j << std::endl;
+
+  for (auto itr = j.begin(); itr != j.end(); ++itr) {
+    std::cout << itr.key() << std::endl;
+    if (itr.value().type() == json::value_t::boolean)
+      properties.push_back(std::make_shared<TypedProperty<bool>>(itr.key(), itr.value(), PropertyType::kBool));
+    else if (itr.value().type() == json::value_t::number_integer || itr.value().type() == json::value_t::number_unsigned)
+      properties.push_back(std::make_shared<TypedProperty<int>>(itr.key(), itr.value(), PropertyType::kInt));
+    else if (itr.value().type() == json::value_t::number_float)
+      properties.push_back(std::make_shared<TypedProperty<float>>(itr.key(), itr.value(), PropertyType::kFloat));
+    else
+      properties.push_back(std::make_shared<TypedProperty<std::string>>(itr.key(), itr.value(), PropertyType::kString));
+  }
 }
 }  // namespace tmxjson

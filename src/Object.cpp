@@ -112,4 +112,8 @@ void Object::SetTextObject(const std::string& text, bool wrap) {
 Text Object::GetTextObject() const {
   return text_;
 }
+
+std::vector<std::shared_ptr<Property>>& Object::GetProperties() {
+  return properties_;
+}
 }  // namespace tmxjson

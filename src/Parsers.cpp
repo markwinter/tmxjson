@@ -3,6 +3,8 @@
 #include "thirdparty/base64.hpp"
 #include "Utils.hpp"
 #include "Parsers.hpp"
+#include "TypedProperty.hpp"
+
 #include <string>
 #include <iostream>
 
@@ -45,6 +47,9 @@ void from_json(const json& object_json, Object& object) {
     object.SetObjectType(ObjectType::kText);
     object.SetTextObject(object_json["text"]["text"], object_json["text"]["wrap"]);
   }
+
+  if (check_json_var(object_json, "properties"))
+    parse_properties(object.GetProperties(), object_json["properties"]);
 
   object.SetName(object_json["name"]);
   object.SetType(object_json["type"]);
@@ -109,6 +114,9 @@ void from_json(const json& layer_json, Layer& layer) {
   if (check_json_var(layer_json, "offsety"))
     layer.SetOffsetY(layer_json["offsety"]);
 
+  if (check_json_var(layer_json, "properties"))
+    parse_properties(layer.GetProperties(), layer_json["properties"]);
+
   layer.SetX(layer_json["x"]);
   layer.SetY(layer_json["y"]);
   layer.SetName(layer_json["name"]);
@@ -143,5 +151,8 @@ void from_json(const json& tileset_json, TileSet& tileset) {
 
     tileset.SetGrid(grid_orientation, tileset_json["grid"]["width"], tileset_json["grid"]["height"]);
   }
+
+  if (check_json_var(tileset_json, "properties"))
+    parse_properties(tileset.GetProperties(), tileset_json["properties"]);
 }
 }  // namespace tmxjson

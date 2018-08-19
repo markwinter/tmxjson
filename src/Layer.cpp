@@ -135,4 +135,8 @@ bool Layer::IsVisible() const {
 void Layer::SetVisible(bool v) {
   visible_ = v;
 }
+
+std::vector<std::shared_ptr<Property>>& Layer::GetProperties() {
+  return properties_;
+}
 }  // namespace tmxjson

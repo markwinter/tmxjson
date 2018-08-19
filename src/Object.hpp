@@ -7,6 +7,7 @@
 #include <utility>
 #include <string>
 
+#include "Property.hpp"
 #include "Text.hpp"
 
 namespace tmxjson {
@@ -47,6 +48,8 @@ class Object {
   void SetHeight(int);
   void SetWidth(int);
 
+  std::vector<std::shared_ptr<Property>>& GetProperties();
+
  private:
   int id_;
   int gid_;
@@ -56,6 +59,7 @@ class Object {
 
   ObjectType object_type_;
   std::vector<std::pair<float, float>> data_points_;
+  std::vector<std::shared_ptr<Property>> properties_;
 
   float rotation_;
   bool visible_;
